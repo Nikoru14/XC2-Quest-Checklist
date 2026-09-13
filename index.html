@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alrest Quest Log — Xenoblade Chronicles 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #130d24;
+    --bg-deep-2: #1c1436;
+    --panel: #211a3d;
+    --panel-edge: rgba(255,255,255,0.07);
+    --violet: #4a3f80;
+    --violet-soft: #6c5b9e;
+    --gold: #e3b84f;
+    --gold-dim: #a5883c;
+    --cyan: #7fd8d4;
+    --text: #efe9fb;
+    --text-muted: #a89bd0;
+    --text-faint: #746a97;
+    --done-bg: rgba(227,184,79,0.07);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(108,91,158,0.35), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(127,216,212,0.10), transparent 55%),
+      var(--bg-deep);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---- Hero ---- */
+  header.hero {
+    position: relative;
+    margin: 0 0 36px;
+    padding: 46px 28px 30px;
+    background: linear-gradient(120deg, var(--violet) 0%, var(--violet-soft) 55%, #3a3168 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 96% 100%, 0 100%);
+    overflow: hidden;
+  }
+  header.hero::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 34px);
+    pointer-events: none;
+  }
+  .eyebrow-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cyan);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+  .eyebrow-mark svg { width: 14px; height: 14px; }
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 2.1rem;
+    margin: 0 0 6px;
+    letter-spacing: 0.01em;
+    color: #fbf7ff;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0 0 26px;
+    max-width: 46ch;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .progress-count {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .progress-count span { color: var(--text-muted); font-size: 1rem; font-family: 'Manrope', sans-serif; }
+  .progress-track {
+    height: 8px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* ---- Controls ---- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .search {
+    flex: 1;
+    min-width: 180px;
+    background: var(--panel);
+    border: 1px solid var(--panel-edge);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.9rem;
+  }
+  .search::placeholder { color: var(--text-faint); }
+  .search:focus { outline: 2px solid var(--cyan); outline-offset: 1px; }
+
+  button.ghost-btn {
+    background: transparent;
+    border: 1px solid var(--panel-edge);
+    color: var(--text-muted);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  button.ghost-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  button.ghost-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* ---- Page groups ---- */
+  .page-group { margin-bottom: 28px; }
+  .page-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .page-head .num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .page-head .rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--panel-edge), transparent);
+  }
+  .page-head .frac {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  ul.quest-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--panel);
+    border: 1px solid var(--panel-edge);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  li.quest-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--panel-edge);
+    transition: background 0.15s ease;
+  }
+  li.quest-item:last-child { border-bottom: none; }
+  li.quest-item:hover { background: rgba(255,255,255,0.02); }
+  li.quest-item.done { background: var(--done-bg); }
+  li.quest-item.hidden { display: none; }
+
+  .gem {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    cursor: pointer;
+  }
+  .gem input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .gem .diamond {
+    position: absolute;
+    inset: 2px;
+    background: transparent;
+    border: 1.6px solid var(--text-faint);
+    transform: rotate(45deg);
+    transition: all 0.15s ease;
+  }
+  .gem input:checked + .diamond {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(227,184,79,0.55);
+  }
+  .gem input:focus-visible + .diamond {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  label.quest-name {
+    flex: 1;
+    font-size: 0.94rem;
+    color: var(--text);
+    cursor: pointer;
+    line-height: 1.35;
+  }
+  li.quest-item.done label.quest-name {
+    color: var(--text-faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--gold-dim);
+  }
+
+  .guide-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--panel-edge);
+    color: var(--text-faint);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-family: 'Manrope', sans-serif;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .guide-btn svg { width: 13px; height: 13px; }
+  .guide-btn:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgba(127,216,212,0.08);
+  }
+  .guide-btn:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+  @media (max-width: 480px) {
+    .guide-btn span { display: none; }
+    .guide-btn { padding: 6px; }
+  }
+
+  footer.note {
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 0.78rem;
+    margin-top: 40px;
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill, li.quest-item, .diamond { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z" fill="#7fd8d4"/></svg>
+      Alrest
+    </div>
+    <h1>Quest Log</h1>
+    <p class="subtitle">Every quest from Xenoblade Chronicles 2, in the exact order the in-game log shows them — 26 pages, 158 quests.</p>
+    <div class="progress-row">
+      <div class="progress-count"><span id="doneCount">0</span> / 158</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </header>
+
+  <div class="controls">
+    <input type="text" class="search" id="searchBox" placeholder="Search a quest name...">
+    <button class="ghost-btn" id="exportBtn">Export progress</button>
+    <button class="ghost-btn" id="importBtn">Import progress</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+    <button class="ghost-btn" id="resetBtn">Reset all</button>
+  </div>
+
+  <div id="listRoot"></div>
+
+  <footer class="note">Progress is saved automatically in this browser.<br>Source order: in-game Quest Log, pages 1–26.<br><span id="ioStatus"></span></footer>
+
+</div>
+
+<script>
+  const WIKI_BASE = "https://www.xenoserieswiki.org/wiki/";
+
+  const pages = [
+    [["Cargo Escort","Cargo_Escort"],["Hide and Seek","Hide_and_Seek_(quest)"],["Knocked About Nopon","Knocked_About_Nopon"],["Buoy Can't Swim","Buoy_Can%27t_Swim"],["Star-Crossed Lovers","Star-Crossed_Lovers"],["A Young Man's Prize","A_Young_Man%27s_Prize"]],
+    [["Mysterious Note","Mysterious_Note"],["Gotta Start Somewhere!","Gotta_Start_Somewhere!"],["Would-Be Mercs","Would-Be_Mercs"],["True Colors","True_Colors"],["Road to the Capital","Road_to_the_Capital"],["Hard to Stomach","Hard_to_Stomach"]],
+    [["At Wit's End","At_Wit%27s_End"],["Mellica the Chorister","Mellica_the_Chorister"],["Partners","Partners"],["The Lost Turtle","The_Lost_Turtle"],["Cannadea's Troubles","Cannadea%27s_Troubles"],["Souvenirs from Morytha","Souvenirs_from_Morytha"]],
+    [["Fresh and Fruity","Fresh_and_Fruity"],["A Helping Hand","A_Helping_Hand"],["World Tree Disaster","World_Tree_Disaster"],["Maiden Voyage","Maiden_Voyage"],["No-Penny Nopon","No-Penny_Nopon"],["Diplomatic Tensions","Diplomatic_Tensions"]],
+    [["A Small War","A_Small_War"],["The Missing Order","The_Missing_Order"],["Stolen Keepsake","Stolen_Keepsake"],["Glory from the Past","Glory_from_the_Past"],["Judicium's Legacy","Judicium%27s_Legacy"],["Ecological Survey","Ecological_Survey"]],
+    [["Timeworn Machine","Timeworn_Machine"],["Indol's Teachings","Indol%27s_Teachings"],["Repair Torigoth's Crane","Repair_Torigoth%27s_Crane"],["Crane Criminals","Crane_Criminals"],["Tirkin Suppression","Tirkin_Suppression"],["Language Teacher","Language_Teacher"]],
+    [["Science Teacher","Science_Teacher"],["History Teacher","History_Teacher"],["Defeat Wiggins","Defeat_Wiggins"],["Defeat Bhianc","Defeat_Bhianc"],["Defeat Arrodh","Defeat_Arrodh"],["Adenine's Password","Adenine%27s_Password_(quest)"]],
+    [["Dagas's Past: Leftheria","Dagas%27s_Past:_Leftheria"],["Dagas's Past: Gormott","Dagas%27s_Past:_Gormott"],["Dagas's Past: Tantal","Dagas%27s_Past:_Tantal"],["Dagas's Past: Folktales","Dagas%27s_Past:_Folktales"],["Boys and Bullies","Boys_and_Bullies"],["Family vs. Fiends","Family_vs._Fiends"]],
+    [["Jeline and Shaun","Jeline_and_Shaun"],["Unspoken Suspicion","Unspoken_Suspicion"],["Big Job Preparations","Big_Job_Preparations"],["The Race to Find Nia","The_Race_to_Find_Nia"],["Artificial Blade Parts 2","Artificial_Blade_Parts_2"],["Artificial Blade Parts 1","Artificial_Blade_Parts_1"]],
+    [["Umon's Ship","Umon%27s_Ship"],["Vandham's Last Wish","Vandham%27s_Last_Wish"],["Stop, Thief!","Stop,_Thief!_(XC2)"],["Lila's Location","Lila%27s_Location"],["Bana the Schemer","Bana_the_Schemer"],["Better Late Than Never","Better_Late_Than_Never"]],
+    [["Into the Open Sky","Into_the_Open_Sky"],["Fame and Family","Fame_and_Family"],["Bana's Secret Treasure","Bana%27s_Secret_Treasure"],["Nopon Doubloons Ahoy","Nopon_Doubloons_Ahoy"],["One Step Ahead","One_Step_Ahead"],["The Driver in Ice","The_Driver_in_Ice"]],
+    [["The Case of the Crane","The_Case_of_the_Crane"],["Concerned Carpenter","Concerned_Carpenter"],["Grow, Little Vegetables!","Grow,_Little_Vegetables!"],["The Militia's Request","The_Militia%27s_Request"],["Whereabouts Unknown","Whereabouts_Unknown"],["Uncover the Truth","Uncover_the_Truth"]],
+    [["Umon Bounces Back","Umon_Bounces_Back"],["The Riddle on the Wall","The_Riddle_on_the_Wall"],["Sniff out the Spy","Sniff_out_the_Spy"],["Difficult Decisions","Difficult_Decisions"],["The Titan Scholar","The_Titan_Scholar"],["A Secret Cure","A_Secret_Cure"]],
+    [["The Nopon Murals","The_Nopon_Murals"],["We Meet Again","We_Meet_Again"],["Insurgent Investigations","Insurgent_Investigations"],["Farewell, Good Friend","Farewell,_Good_Friend"],["Time is Money","Time_is_Money"],["School is in Session","School_is_in_Session"]],
+    [["A Ripe New Frontier","A_Ripe_New_Frontier"],["The Writer's Assistant","The_Writer%27s_Assistant"],["Salvage King","Salvage_King"],["Bana's Revenge","Bana%27s_Revenge"],["Powered-Up Poppi","Powered-Up_Poppi"],["The Supply Situation","The_Supply_Situation"]],
+    [["A Test of Strength","A_Test_of_Strength"],["Leadership Qualities","Leadership_Qualities"],["Marvelous Mercenaries","Marvelous_Mercenaries"],["Paying It Forward","Paying_It_Forward"],["Pest Control 1","Pest_Control_1"],["Pest Control 2","Pest_Control_2"]],
+    [["Pest Control 3","Pest_Control_3"],["Passion of the Artisan","Passion_of_the_Artisan"],["M.I.A. Nopon","M.I.A._Nopon"],["Industrial Sort of Tour","Industrial_Sort_of_Tour"],["Midnight Feasting","Midnight_Feasting"],["The Lone Watchman","The_Lone_Watchman"]],
+    [["Nopon of Good Tastes","Nopon_of_Good_Tastes"],["Cleared of All Charges","Cleared_of_All_Charges"],["Beneath the Aurora","Beneath_the_Aurora"],["Upgrades and Tinkering","Upgrades_and_Tinkering"],["Most Awful News?!","Most_Awful_News%3F!"],["A Smith's Pastime","A_Smith%27s_Pastime"]],
+    [["A Hat Fit for a Lady","A_Hat_Fit_for_a_Lady"],["Making Love Source","Making_Love_Source"],["A Mercenary's Honor","A_Mercenary%27s_Honor"],["Merclibay's Mightiest","Merclibay%27s_Mightiest"],["Sunken Boosters","Sunken_Boosters"],["The Trendy Patissier","The_Trendy_Patissier"]],
+    [["Artisanal Accessories","Artisanal_Accessories"],["Hot Spring Bonanza","Hot_Spring_Bonanza"],["Mystery Launch Codes","Mystery_Launch_Codes"],["Search for Tekuteku","Search_for_Tekuteku"],["Search for Alec","Search_for_Alec"],["Search for Sarrac","Search_for_Sarrac"]],
+    [["Flames of Justice","Flames_of_Justice"],["Tender-Hearted Beast","Tender-Hearted_Beast"],["Failure and Success","Failure_and_Success"],["Follow Your Passion","Follow_Your_Passion"],["Lost Kingdom","Lost_Kingdom"],["Hero of the Nopon","Hero_of_the_Nopon"]],
+    [["Nature Boy","Nature_Boy"],["Our Daily Bread","Our_Daily_Bread"],["Crystal Clear","Crystal_Clear"],["Blade-Sharp Memory","Blade-Sharp_Memory"],["Theory and Praxis","Theory_and_Praxis"],["Eternal Spirit","Eternal_Spirit"]],
+    [["Girl Power-Off","Girl_Power-Off"],["All's Fair","All%27s_Fair"],["Bearing Her Soul","Bearing_Her_Soul"],["Newt Recruits","Newt_Recruits"],["A Phonex Tale","A_Phonex_Tale"],["Fool's Gold","Fool%27s_Gold"]],
+    [["Tranquility","Tranquility"],["Limits of Awareness","Limits_of_Awareness"],["Go for it, Electra!","Go_for_it,_Electra!"],["A Real Challenge","A_Real_Challenge"],["Birds of a Feather","Birds_of_a_Feather"],["Artificial Intelligence","Artificial_Intelligence"]],
+    [["The Calm and the Storm","The_Calm_and_the_Storm"],["The Ties that Bind","The_Ties_that_Bind_(XC2)"],["Precious Yearnings","Precious_Yearnings"],["Fly in the Ointment","Fly_in_the_Ointment"],["Lingering Resentment","Lingering_Resentment"],["Shiny New Power","Shiny_New_Power"]],
+    [["Bright Spark","Bright_Spark_(XC2)"],["Corvin's Approach","Corvin%27s_Approach"]]
+  ];
+
+  const STORAGE_KEY = "xc2_quest_checklist_v1";
+  const root = document.getElementById("listRoot");
+  const doneCountEl = document.getElementById("doneCount");
+  const fillEl = document.getElementById("progressFill");
+  const totalQuests = pages.reduce((sum, p) => sum + p.length, 0);
+
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (e) { return {}; }
+  }
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  let state = loadState();
+
+  function questId(pageIdx, itemIdx) {
+    return `p${pageIdx + 1}_i${itemIdx}`;
+  }
+
+  function render() {
+    root.innerHTML = "";
+
+    const ul = document.createElement("ul");
+    ul.className = "quest-list";
+
+    pages.forEach((quests, pageIdx) => {
+      quests.forEach(([name, slug], itemIdx) => {
+        const id = questId(pageIdx, itemIdx);
+        const checked = !!state[id];
+        const li = document.createElement("li");
+        li.className = "quest-item" + (checked ? " done" : "");
+        li.dataset.name = name.toLowerCase();
+
+        li.innerHTML = `
+          <span class="gem">
+            <input type="checkbox" id="${id}" ${checked ? "checked" : ""}>
+            <span class="diamond"></span>
+          </span>
+          <label class="quest-name" for="${id}">${name}</label>
+          <a class="guide-btn" href="${WIKI_BASE}${slug}" target="_blank" rel="noopener noreferrer" title="Open wiki guide for ${name}" aria-label="Open wiki guide for ${name}">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>Guide</span>
+          </a>
+        `;
+        ul.appendChild(li);
+      });
+    });
+
+    root.appendChild(ul);
+
+    root.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener("change", onToggle);
+    });
+
+    updateSummary();
+  }
+
+  function onToggle(e) {
+    const id = e.target.id;
+    state[id] = e.target.checked;
+    saveState(state);
+
+    const li = e.target.closest(".quest-item");
+    li.classList.toggle("done", e.target.checked);
+
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const done = Object.values(state).filter(Boolean).length;
+    doneCountEl.textContent = done;
+    fillEl.style.width = `${(done / totalQuests) * 100}%`;
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (!confirm("Clear all checked quests? This can't be undone.")) return;
+    state = {};
+    saveState(state);
+    render();
+  });
+
+  function showStatus(msg, isError) {
+    const el = document.getElementById("ioStatus");
+    el.textContent = msg;
+    el.style.color = isError ? "#e08b8b" : "var(--cyan)";
+    setTimeout(() => { if (el.textContent === msg) el.textContent = ""; }, 4000);
+  }
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const done = Object.values(state).filter(Boolean).length;
+    const payload = {
+      type: "xc2_quest_checklist",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      totalQuests,
+      doneCount: done,
+      state
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.download = `xc2_quest_progress_${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showStatus(`Exported (${done}/${totalQuests} checked).`);
+  });
+
+  document.getElementById("importBtn").addEventListener("click", () => {
+    document.getElementById("importFile").click();
+  });
+
+  document.getElementById("importFile").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const payload = JSON.parse(ev.target.result);
+        const incoming = payload && payload.state ? payload.state : payload;
+        if (!incoming || typeof incoming !== "object") throw new Error("bad format");
+
+        const validIds = new Set();
+        pages.forEach((quests, pageIdx) => quests.forEach((_, itemIdx) => validIds.add(questId(pageIdx, itemIdx))));
+        const cleaned = {};
+        let matched = 0;
+        Object.keys(incoming).forEach(k => {
+          if (validIds.has(k)) { cleaned[k] = !!incoming[k]; if (incoming[k]) matched++; }
+        });
+
+        if (!confirm(`Import will replace your current progress with ${matched} checked quest(s) from this file. Continue?`)) return;
+
+        state = cleaned;
+        saveState(state);
+        render();
+        showStatus(`Imported (${matched}/${totalQuests} checked).`);
+      } catch (err) {
+        showStatus("Couldn't read that file — is it a checklist export?", true);
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("searchBox").addEventListener("input", (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll(".quest-item").forEach(li => {
+      li.classList.toggle("hidden", q && !li.dataset.name.includes(q));
+    });
+  });
+
+  render();
+</script>
+
+</body>
+</html>
