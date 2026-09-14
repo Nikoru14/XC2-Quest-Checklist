@@ -120,6 +120,12 @@
       font-family: 'Manrope', sans-serif;
     }
 
+    .progress-count span#totalCount {
+      color: var(--gold);
+      font-size: 1.5rem;
+      font-family: 'Cinzel', serif;
+    }
+
     .progress-track {
       height: 8px;
       background: rgba(0, 0, 0, 0.35);
@@ -185,7 +191,325 @@
       outline-offset: 2px;
     }
 
-    /* ---- Page groups ---- */
+    /* ---- View toggle ---- */
+    .view-toggle {
+      display: flex;
+      border: 1px solid var(--panel-edge);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 16px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-right: 1px solid var(--panel-edge);
+    }
+
+    .view-btn:last-child {
+      border-right: none;
+    }
+
+    .view-btn:hover {
+      color: var(--cyan);
+    }
+
+    .view-btn.active {
+      background: rgba(227, 184, 79, 0.12);
+      color: var(--gold);
+    }
+
+    .view-btn:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: -2px;
+    }
+
+    /* ---- Tile view ---- */
+    .tile-page-group {
+      margin-bottom: 30px;
+    }
+
+    .tile-page-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tile-page-head .num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .tile-page-head .rule {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--panel-edge), transparent);
+    }
+
+    .tile-page-head .frac {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tile-carousel-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .nav-arrow {
+      flex: 0 0 auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--panel-edge);
+      background: var(--panel);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .nav-arrow svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-arrow:hover:not(:disabled) {
+      border-color: var(--cyan);
+      background: rgba(127, 216, 212, 0.08);
+      transform: scale(1.05);
+    }
+
+    .nav-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav-arrow:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .nav-center {
+      flex: 1;
+      text-align: center;
+    }
+
+    .nav-page-label {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-page-label .of {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .nav-page-frac {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .nav-dots {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .nav-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--panel-edge);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.15s ease;
+    }
+
+    .nav-dot:hover {
+      background: var(--violet-soft);
+    }
+
+    .nav-dot.active {
+      background: var(--gold);
+      transform: scale(1.3);
+    }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .tile-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 400px) {
+      .tile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--panel-edge);
+      cursor: pointer;
+      background: var(--panel);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--violet-soft);
+    }
+
+    .tile.done {
+      border-color: var(--gold-dim);
+    }
+
+    .tile.hidden {
+      display: none;
+    }
+
+    .tile-thumb {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(127, 216, 212, 0.18), transparent 55%),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 22px),
+        linear-gradient(150deg, #3a3168, #221a45 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tile-thumb svg {
+      width: 34px;
+      height: 34px;
+      opacity: 0.55;
+      color: var(--cyan);
+      z-index: 1;
+    }
+
+    .tile-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .tile-thumb.has-image svg {
+      display: none;
+    }
+
+    .tile.done .tile-thumb svg {
+      opacity: 0.85;
+      color: var(--gold);
+    }
+
+    .tile-laurel {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .tile-laurel svg {
+      width: 13px;
+      height: 13px;
+      opacity: 0.35;
+      color: var(--text-muted);
+    }
+
+    .tile.done .tile-laurel {
+      background: rgba(227, 184, 79, 0.18);
+      border-color: var(--gold-dim);
+    }
+
+    .tile.done .tile-laurel svg {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    .tile-guide-icon {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      text-decoration: none;
+      z-index: 2;
+    }
+
+    .tile-guide-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .tile-guide-icon:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      background: rgba(127, 216, 212, 0.12);
+    }
+
+    .tile-title-bar {
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      line-height: 1.3;
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(33, 26, 61, 0.4), var(--panel));
+      min-height: 2.6em;
+      display: flex;
+      align-items: center;
+    }
+
+    .tile.done .tile-title-bar {
+      color: var(--text-faint);
+      text-decoration: line-through;
+      text-decoration-color: var(--gold-dim);
+    }
+
     .page-group {
       margin-bottom: 28px;
     }
@@ -376,7 +700,7 @@
       <h1>Quest Log</h1>
       <p class="subtitle">Every quest from Xenoblade Chronicles 2, in the exact order the in-game log shows them.</p>
       <div class="progress-row">
-        <div class="progress-count"><span id="doneCount">0</span> / 155</div>
+        <div class="progress-count"><span id="doneCount">0</span> / <span id="totalCount">158</span></div>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
@@ -385,11 +709,17 @@
 
     <div class="controls">
       <input type="text" class="search" id="searchBox" placeholder="Search a quest name...">
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn active" id="listViewBtn" type="button">List</button>
+        <button class="view-btn" id="tileViewBtn" type="button">Tiles</button>
+      </div>
+      <button class="ghost-btn" id="loadThumbsBtn">Load thumbnails</button>
       <button class="ghost-btn" id="exportBtn">Export progress</button>
       <button class="ghost-btn" id="importBtn">Import progress</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
       <button class="ghost-btn" id="resetBtn">Reset all</button>
     </div>
+    <p class="subtitle" id="thumbStatus" style="margin: -18px 0 20px;"></p>
 
     <div id="listRoot"></div>
 
@@ -422,15 +752,16 @@
       [["Nopon of Good Tastes", "Nopon_of_Good_Tastes"], ["Cleared of All Charges", "Cleared_of_All_Charges"], ["Beneath the Aurora", "Beneath_the_Aurora"], ["Upgrades and Tinkering", "Upgrades_and_Tinkering"], ["Most Awful News?!", "Most_Awful_News%3F!"], ["A Smith's Pastime", "A_Smith%27s_Pastime"]],
       [["A Hat Fit for a Lady", "A_Hat_Fit_for_a_Lady"], ["Making Love Source", "Making_Love_Source"], ["A Mercenary's Honor", "A_Mercenary%27s_Honor"], ["Merclibay's Mightiest", "Merclibay%27s_Mightiest"], ["Sunken Boosters", "Sunken_Boosters"], ["The Trendy Patissier", "The_Trendy_Patissier"]],
       [["Artisanal Accessories", "Artisanal_Accessories"], ["Hot Spring Bonanza", "Hot_Spring_Bonanza"], ["Mystery Launch Codes", "Mystery_Launch_Codes"], ["Search for Tekuteku", "Search_for_Tekuteku"], ["Search for Alec", "Search_for_Alec"], ["Search for Sarrac", "Search_for_Sarrac"]],
-      [["Flames of Justice", "Flames_of_Justice"], ["Tender-Hearted Beast", "Tender-Hearted_Beast"], ["Failure and Success", "Failure_and_Success"], ["Follow Your Passion", "Follow_Your_Passion"], ["Lost Kingdom", "Lost_Kingdom"], ["Hero of the Nopon", "Hero_of_the_Nopon"]],
-      [["Nature Boy", "Nature_Boy"], ["Our Daily Bread", "Our_Daily_Bread"], ["Crystal Clear", "Crystal_Clear"], ["Blade-Sharp Memory", "Blade-Sharp_Memory"], ["Theory and Praxis", "Theory_and_Praxis"], ["Eternal Spirit", "Eternal_Spirit"]],
-      [["Girl Power-Off", "Girl_Power-Off"], ["All's Fair", "All%27s_Fair"], ["Bearing Her Soul", "Bearing_Her_Soul"], ["Newt Recruits", "Newt_Recruits"], ["A Phonex Tale", "A_Phonex_Tale"], ["Fool's Gold", "Fool%27s_Gold"]],
-      [["Tranquility", "Tranquility"], ["Limits of Awareness", "Limits_of_Awareness"], ["Go for it, Electra!", "Go_for_it,_Electra!"], ["A Real Challenge", "A_Real_Challenge"], ["Birds of a Feather", "Birds_of_a_Feather"], ["Artificial Intelligence", "Artificial_Intelligence"]],
-      [["The Calm and the Storm", "The_Calm_and_the_Storm"], ["The Ties that Bind", "The_Ties_that_Bind_(XC2)"], ["Precious Yearnings", "Precious_Yearnings"], ["Fly in the Ointment", "Fly_in_the_Ointment"], ["Lingering Resentment", "Lingering_Resentment"], ["Shiny New Power", "Shiny_New_Power"]],
-      [["Bright Spark", "Bright_Spark_(XC2)"], ["Corvin's Approach", "Corvin%27s_Approach"]]
+      [["Tora's Secret Stash", "Tora%27s_Secret_Stash"], ["Vandham's Other Ask", "Vandham%27s_Other_Ask"], ["Flames of Justice", "Flames_of_Justice"], ["Tender-Hearted Beast", "Tender-Hearted_Beast"], ["Failure and Success", "Failure_and_Success"], ["Follow Your Passion", "Follow_Your_Passion"]],
+      [["Lost Kingdom", "Lost_Kingdom"], ["Hero of the Nopon", "Hero_of_the_Nopon"], ["Nature Boy", "Nature_Boy"], ["Our Daily Bread", "Our_Daily_Bread"], ["Crystal Clear", "Crystal_Clear"], ["Blade-Sharp Memory", "Blade-Sharp_Memory"]],
+      [["Theory and Praxis", "Theory_and_Praxis"], ["Eternal Spirit", "Eternal_Spirit"], ["Girl Power-Off", "Girl_Power-Off"], ["All's Fair", "All%27s_Fair"], ["Bearing Her Soul", "Bearing_Her_Soul"], ["Newt Recruits", "Newt_Recruits"]],
+      [["A Phonex Tale", "A_Phonex_Tale"], ["Fool's Gold", "Fool%27s_Gold"], ["Tranquility", "Tranquility"], ["Limits of Awareness", "Limits_of_Awareness"], ["Go for it, Electra!", "Go_for_it,_Electra!"], ["A Real Challenge", "A_Real_Challenge"]],
+      [["Birds of a Feather", "Birds_of_a_Feather"], ["Artificial Intelligence", "Artificial_Intelligence"], ["The Calm and the Storm", "The_Calm_and_the_Storm"], ["The Ties that Bind", "The_Ties_that_Bind_(XC2)"], ["Precious Yearnings", "Precious_Yearnings"], ["Fly in the Ointment", "Fly_in_the_Ointment"]],
+      [["Lingering Resentment", "Lingering_Resentment"], ["Shiny New Power", "Shiny_New_Power"], ["Bright Spark", "Bright_Spark_(XC2)"], ["Corvin's Approach", "Corvin%27s_Approach"], ["The Home of the Soul", "The_Home_of_the_Soul"]]
     ];
 
     const STORAGE_KEY = "xc2_quest_checklist_v1";
+    const VIEW_KEY = "xc2_quest_checklist_view";
     const root = document.getElementById("listRoot");
     const doneCountEl = document.getElementById("doneCount");
     const fillEl = document.getElementById("progressFill");
@@ -446,14 +777,30 @@
     }
 
     let state = loadState();
+    let viewMode = "list";
+    try { viewMode = localStorage.getItem(VIEW_KEY) || "list"; } catch (e) { }
 
     function questId(pageIdx, itemIdx) {
       return `p${pageIdx + 1}_i${itemIdx}`;
     }
 
+    function toggleQuest(id, checked) {
+      state[id] = checked;
+      saveState(state);
+      updateSummary();
+    }
+
     function render() {
       root.innerHTML = "";
+      if (viewMode === "tile") {
+        renderTiles();
+      } else {
+        renderList();
+      }
+      updateSummary();
+    }
 
+    function renderList() {
       const ul = document.createElement("ul");
       ul.className = "quest-list";
 
@@ -483,27 +830,296 @@
       root.appendChild(ul);
 
       root.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-        cb.addEventListener("change", onToggle);
+        cb.addEventListener("change", (e) => {
+          const id = e.target.id;
+          toggleQuest(id, e.target.checked);
+          const li = e.target.closest(".quest-item");
+          li.classList.toggle("done", e.target.checked);
+        });
       });
-
-      updateSummary();
     }
 
-    function onToggle(e) {
-      const id = e.target.id;
-      state[id] = e.target.checked;
-      saveState(state);
+    const PAGE_KEY = "xc2_quest_checklist_page";
+    const TILE_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M12 3L14.2 9.2L20.5 11L14.2 12.8L12 19L9.8 12.8L3.5 11L9.8 9.2L12 3Z" fill="currentColor"/></svg>`;
+    const LAUREL_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M5 20C7 15 6 9 4 5C7 6 9.5 8.5 10 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M19 20C17 15 18 9 20 5C17 6 14.5 8.5 14 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 12V20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+    let currentPage = 1;
+    try { currentPage = parseInt(localStorage.getItem(PAGE_KEY), 10) || 1; } catch (e) { }
+    if (currentPage < 1 || currentPage > pages.length) currentPage = 1;
 
-      const li = e.target.closest(".quest-item");
-      li.classList.toggle("done", e.target.checked);
+    function renderTiles() {
+      const query = document.getElementById("searchBox").value.trim().toLowerCase();
+      if (query) {
+        renderTilesFlat(query);
+      } else {
+        renderTileCarousel();
+      }
+    }
 
-      updateSummary();
+    function buildTileGrid(quests, pageIdx) {
+      const grid = document.createElement("div");
+      grid.className = "tile-grid";
+
+      quests.forEach(([name, slug], itemIdx) => {
+        const id = questId(pageIdx, itemIdx);
+        const checked = !!state[id];
+        const tile = document.createElement("div");
+        tile.className = "tile" + (checked ? " done" : "");
+        tile.dataset.name = name.toLowerCase();
+        tile.dataset.id = id;
+        tile.setAttribute("role", "button");
+        tile.setAttribute("tabindex", "0");
+        tile.setAttribute("aria-pressed", checked ? "true" : "false");
+
+        const thumbUrl = thumbCache[id];
+        const thumbHtml = thumbUrl
+          ? `<img src="${thumbUrl}" alt="" loading="lazy" onerror="this.remove()">${TILE_ICON}`
+          : TILE_ICON;
+
+        tile.innerHTML = `
+          <div class="tile-thumb${thumbUrl ? " has-image" : ""}">${thumbHtml}</div>
+          <div class="tile-laurel">${LAUREL_ICON}</div>
+          <a class="tile-guide-icon" href="${WIKI_BASE}${slug}" target="_blank" rel="noopener noreferrer" title="Open wiki guide for ${name}" aria-label="Open wiki guide for ${name}" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="tile-title-bar">${name}</div>
+        `;
+
+        const pageNum = pageIdx + 1;
+        tile.addEventListener("click", () => flipTile(tile, pageIdx, id, pageNum));
+        tile.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            flipTile(tile, pageIdx, id, pageNum);
+          }
+        });
+
+        grid.appendChild(tile);
+      });
+
+      return grid;
+    }
+
+    function renderTileCarousel() {
+      const pageIdx = currentPage - 1;
+      const quests = pages[pageIdx];
+      const doneInPage = quests.filter((_, i) => state[questId(pageIdx, i)]).length;
+
+      const nav = document.createElement("div");
+      nav.className = "tile-carousel-nav";
+      nav.innerHTML = `
+        <button class="nav-arrow" id="prevPageBtn" ${currentPage === 1 ? "disabled" : ""} aria-label="Previous page">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-center">
+          <div class="nav-page-label">Page ${currentPage} <span class="of">/ ${pages.length}</span></div>
+          <div class="nav-page-frac" data-page-frac="${currentPage}">${doneInPage}/${quests.length} done</div>
+        </div>
+        <button class="nav-arrow" id="nextPageBtn" ${currentPage === pages.length ? "disabled" : ""} aria-label="Next page">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      `;
+      root.appendChild(nav);
+
+      root.appendChild(buildTileGrid(quests, pageIdx));
+
+      const dots = document.createElement("div");
+      dots.className = "nav-dots";
+      pages.forEach((_, i) => {
+        const dot = document.createElement("button");
+        dot.className = "nav-dot" + (i + 1 === currentPage ? " active" : "");
+        dot.setAttribute("aria-label", `Go to page ${i + 1}`);
+        dot.addEventListener("click", () => goToPage(i + 1));
+        dots.appendChild(dot);
+      });
+      root.appendChild(dots);
+
+      document.getElementById("prevPageBtn").addEventListener("click", () => goToPage(currentPage - 1));
+      document.getElementById("nextPageBtn").addEventListener("click", () => goToPage(currentPage + 1));
+    }
+
+    function renderTilesFlat(query) {
+      const note = document.createElement("p");
+      note.className = "subtitle";
+      note.style.marginBottom = "16px";
+      note.textContent = `Showing search results across all pages for "${query}".`;
+      root.appendChild(note);
+
+      pages.forEach((quests, pageIdx) => {
+        const matches = quests
+          .map((q, i) => [q, i])
+          .filter(([[name]]) => name.toLowerCase().includes(query));
+        if (matches.length === 0) return;
+
+        const group = document.createElement("div");
+        group.className = "tile-page-group";
+        const head = document.createElement("div");
+        head.className = "tile-page-head";
+        head.innerHTML = `<span class="num">Page ${pageIdx + 1}</span><span class="rule"></span>`;
+        group.appendChild(head);
+        group.appendChild(buildTileGrid(matches.map(([q]) => q), pageIdx));
+        // patch item ids to the true index within the full page, not the filtered slice
+        [...group.querySelectorAll(".tile")].forEach((tile, i) => {
+          const realIdx = matches[i][1];
+          const id = questId(pageIdx, realIdx);
+          tile.dataset.id = id;
+        });
+        root.appendChild(group);
+      });
+    }
+
+    function goToPage(n) {
+      if (n < 1 || n > pages.length) return;
+      currentPage = n;
+      try { localStorage.setItem(PAGE_KEY, currentPage); } catch (e) { }
+      render();
+    }
+
+    function flipTile(tile, pageIdx, id, pageNum) {
+      const checked = !state[id];
+      toggleQuest(id, checked);
+      tile.classList.toggle("done", checked);
+      tile.setAttribute("aria-pressed", checked ? "true" : "false");
+
+      const doneInPage = pages[pageIdx].filter((_, i) => state[questId(pageIdx, i)]).length;
+      const fracEl = document.querySelector(`[data-page-frac="${pageNum}"]`);
+      if (fracEl) fracEl.textContent = `${doneInPage}/${pages[pageIdx].length}`;
     }
 
     function updateSummary() {
       const done = Object.values(state).filter(Boolean).length;
       doneCountEl.textContent = done;
+      document.getElementById("totalCount").textContent = totalQuests;
       fillEl.style.width = `${(done / totalQuests) * 100}%`;
+    }
+
+    const THUMB_KEY = "xc2_quest_checklist_thumbs_v1";
+    const API_BASE = "https://www.xenoserieswiki.org/w/api.php";
+
+    function loadThumbCache() {
+      try { return JSON.parse(localStorage.getItem(THUMB_KEY)) || {}; } catch (e) { return {}; }
+    }
+    function saveThumbCache(cache) {
+      try { localStorage.setItem(THUMB_KEY, JSON.stringify(cache)); } catch (e) { }
+    }
+    let thumbCache = loadThumbCache();
+
+    // Map each quest's wiki title (decoded from its slug) back to its questId,
+    // so API responses can be matched to the right tile.
+    const titleToId = {};
+    pages.forEach((quests, pageIdx) => {
+      quests.forEach(([name, slug], itemIdx) => {
+        const title = decodeURIComponent(slug.replace(/_/g, " "));
+        titleToId[title] = questId(pageIdx, itemIdx);
+      });
+    });
+
+    function chunk(arr, size) {
+      const out = [];
+      for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+      return out;
+    }
+
+    function setThumbStatus(msg, isError) {
+      const el = document.getElementById("thumbStatus");
+      el.textContent = msg;
+      el.style.color = isError ? "#e08b8b" : "";
+    }
+
+    async function fetchThumbnails(force) {
+      const allTitles = Object.keys(titleToId);
+      const missing = force ? allTitles : allTitles.filter(t => !(titleToId[t] in thumbCache));
+      if (missing.length === 0) {
+        setThumbStatus("All thumbnails already loaded.");
+        return;
+      }
+
+      const btn = document.getElementById("loadThumbsBtn");
+      btn.disabled = true;
+      const batches = chunk(missing, 50);
+      let done = 0, gotImage = 0, failed = 0;
+
+      for (const batch of batches) {
+        setThumbStatus(`Fetching thumbnails... (${done}/${missing.length})`);
+        try {
+          const params = new URLSearchParams({
+            action: "query",
+            format: "json",
+            prop: "pageimages",
+            piprop: "thumbnail",
+            pithumbsize: "240",
+            titles: batch.join("|"),
+            origin: "*"
+          });
+          const res = await fetch(`${API_BASE}?${params.toString()}`);
+          if (!res.ok) throw new Error(res.status);
+          const data = await res.json();
+
+          const normMap = {};
+          (data.query && data.query.normalized || []).forEach(n => { normMap[n.to] = n.from; });
+
+          const pagesObj = (data.query && data.query.pages) || {};
+          const seenTitles = new Set();
+
+          Object.values(pagesObj).forEach(p => {
+            const originalTitle = normMap[p.title] || p.title;
+            seenTitles.add(originalTitle);
+            const id = titleToId[originalTitle];
+            if (!id) return;
+            if (p.thumbnail && p.thumbnail.source) {
+              thumbCache[id] = p.thumbnail.source;
+              gotImage++;
+            } else {
+              thumbCache[id] = null;
+            }
+          });
+
+          batch.forEach(t => {
+            if (!seenTitles.has(t) && titleToId[t]) {
+              thumbCache[titleToId[t]] = null;
+              failed++;
+            }
+          });
+        } catch (err) {
+          batch.forEach(t => { if (titleToId[t]) failed++; });
+        }
+        done += batch.length;
+      }
+
+      saveThumbCache(thumbCache);
+      btn.disabled = false;
+
+      if (gotImage === 0 && failed > 0) {
+        setThumbStatus("Couldn't reach the wiki's API from this browser (likely blocked cross-origin). Tiles will keep their placeholder icon.", true);
+      } else {
+        setThumbStatus(`Loaded ${gotImage} thumbnail(s)${failed ? `, ${failed} unavailable` : ""}.`);
+      }
+
+      render();
+    }
+
+    document.getElementById("loadThumbsBtn").addEventListener("click", () => fetchThumbnails(false));
+
+    document.getElementById("listViewBtn").addEventListener("click", () => {
+      viewMode = "list";
+      try { localStorage.setItem(VIEW_KEY, viewMode); } catch (e) { }
+      document.getElementById("listViewBtn").classList.add("active");
+      document.getElementById("tileViewBtn").classList.remove("active");
+      render();
+      applySearchFilter();
+    });
+
+    document.getElementById("tileViewBtn").addEventListener("click", () => {
+      viewMode = "tile";
+      try { localStorage.setItem(VIEW_KEY, viewMode); } catch (e) { }
+      document.getElementById("tileViewBtn").classList.add("active");
+      document.getElementById("listViewBtn").classList.remove("active");
+      render();
+      applySearchFilter();
+    });
+
+    if (viewMode === "tile") {
+      document.getElementById("tileViewBtn").classList.add("active");
+      document.getElementById("listViewBtn").classList.remove("active");
     }
 
     document.getElementById("resetBtn").addEventListener("click", () => {
@@ -577,11 +1193,26 @@
       reader.readAsText(file);
     });
 
-    document.getElementById("searchBox").addEventListener("input", (e) => {
-      const q = e.target.value.trim().toLowerCase();
+    function applySearchFilter() {
+      if (viewMode === "tile") {
+        render();
+        return;
+      }
+      const q = document.getElementById("searchBox").value.trim().toLowerCase();
+
       document.querySelectorAll(".quest-item").forEach(li => {
         li.classList.toggle("hidden", q && !li.dataset.name.includes(q));
       });
+    }
+
+    document.getElementById("searchBox").addEventListener("input", applySearchFilter);
+
+    document.addEventListener("keydown", (e) => {
+      if (viewMode !== "tile") return;
+      if (document.activeElement === document.getElementById("searchBox")) return;
+      if (document.getElementById("searchBox").value.trim()) return;
+      if (e.key === "ArrowRight") goToPage(currentPage + 1);
+      if (e.key === "ArrowLeft") goToPage(currentPage - 1);
     });
 
     render();
