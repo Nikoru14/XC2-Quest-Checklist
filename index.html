@@ -612,7 +612,6 @@
     }
 
     label.quest-name {
-      flex: 1;
       font-size: 0.94rem;
       color: var(--text);
       cursor: pointer;
@@ -639,6 +638,76 @@
       font-family: 'Manrope', sans-serif;
       white-space: nowrap;
       transition: all 0.15s ease;
+    }
+
+    /* ---- Category tags ---- */
+    .quest-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tag-ns2 {
+      color: #8fe3de;
+      background: rgba(127, 216, 212, 0.12);
+      border-color: rgba(127, 216, 212, 0.35);
+    }
+
+    .tag-dlc {
+      color: #c9a7f0;
+      background: rgba(180, 140, 235, 0.12);
+      border-color: rgba(180, 140, 235, 0.32);
+    }
+
+    .tag-blade {
+      color: var(--gold);
+      background: rgba(227, 184, 79, 0.1);
+      border-color: rgba(227, 184, 79, 0.3);
+    }
+
+    .tag-main {
+      color: #f0a6a6;
+      background: rgba(230, 120, 120, 0.12);
+      border-color: rgba(230, 120, 120, 0.32);
+    }
+
+    .tag-side {
+      color: var(--text-muted);
+      background: rgba(168, 155, 208, 0.1);
+      border-color: rgba(168, 155, 208, 0.25);
+    }
+
+    li.quest-item.done .tag {
+      opacity: 0.45;
+    }
+
+    .tile-title-bar .tag-row {
+      margin-top: 3px;
+    }
+
+    .tile-title-bar .tag {
+      font-size: 0.55rem;
+      padding: 1px 4px;
     }
 
     .guide-btn svg {
@@ -713,7 +782,6 @@
         <button class="view-btn active" id="listViewBtn" type="button">List</button>
         <button class="view-btn" id="tileViewBtn" type="button">Tiles</button>
       </div>
-      <button class="ghost-btn" id="loadThumbsBtn">Load thumbnails</button>
       <button class="ghost-btn" id="exportBtn">Export progress</button>
       <button class="ghost-btn" id="importBtn">Import progress</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
@@ -730,6 +798,71 @@
 
   <script>
     const WIKI_BASE = "https://www.xenoserieswiki.org/wiki/";
+
+    // ---- Quest category tags ----
+    // Base-game Blade Quests
+    const BLADE_QUESTS = new Set([
+      "Flames of Justice", "Tender-Hearted Beast", "Failure and Success", "Follow Your Passion",
+      "Lost Kingdom", "Hero of the Nopon", "Nature Boy", "Our Daily Bread", "Crystal Clear",
+      "Blade-Sharp Memory", "Theory and Praxis", "Eternal Spirit", "Girl Power-Off", "All's Fair",
+      "Bearing Her Soul", "Newt Recruits", "A Phonex Tale", "Fool's Gold", "Tranquility",
+      "Limits of Awareness", "Go for it, Electra!", "A Real Challenge", "Birds of a Feather",
+      "Artificial Intelligence", "The Calm and the Storm", "The Ties that Bind",
+      "Precious Yearnings", "Fly in the Ointment",
+      // Expansion Pass Blade Quests
+      "Lingering Resentment", "Shiny New Power", "Bright Spark", "Corvin's Approach",
+      // Switch 2 Edition Blade Quest
+      "The Home of the Soul"
+    ]);
+
+    // Main Story Quests — auto-accepted during the story, required to progress
+    const MAIN_STORY_QUESTS = new Set([
+      "Big Job Preparations", "The Race to Find Nia", "Artificial Blade Parts 1",
+      "Artificial Blade Parts 2", "Stop, Thief!", "Umon's Ship", "Vandham's Last Wish",
+      "Lila's Location", "Bana the Schemer"
+    ]);
+
+    // Expansion Pass (DLC) quests — the four DLC quest waves plus Challenge Battle quests
+    const DLC_QUESTS = new Set([
+      // Wave 1
+      "Passion of the Artisan", "M.I.A. Nopon", "Industrial Sort of Tour", "Midnight Feasting", "The Lone Watchman",
+      // Wave 2
+      "Nopon of Good Tastes", "Cleared of All Charges", "Beneath the Aurora", "Upgrades and Tinkering", "Most Awful News?!",
+      // Wave 3
+      "A Smith's Pastime", "A Hat Fit for a Lady", "Making Love Source", "A Mercenary's Honor", "Merclibay's Mightiest",
+      // Wave 4
+      "Sunken Boosters", "The Trendy Patissier", "Artisanal Accessories", "Hot Spring Bonanza", "Mystery Launch Codes",
+      // Challenge Battle
+      "Search for Tekuteku", "Search for Alec", "Search for Sarrac",
+      // DLC Blade Quests
+      "Shiny New Power", "Bright Spark", "Corvin's Approach"
+    ]);
+
+    // Nintendo Switch 2 Edition exclusive quests
+    const NS2_QUESTS = new Set([
+      "Tora's Secret Stash", "Vandham's Other Ask", "The Home of the Soul"
+    ]);
+
+    function tagsFor(name) {
+      const tags = [];
+
+      // Quest type — every quest gets exactly one
+      if (MAIN_STORY_QUESTS.has(name)) tags.push({ label: "Main Story", cls: "tag-main" });
+      else if (BLADE_QUESTS.has(name)) tags.push({ label: "Blade Quest", cls: "tag-blade" });
+      else tags.push({ label: "Side Quest", cls: "tag-side" });
+
+      // Availability — only where it isn't base game
+      if (NS2_QUESTS.has(name)) tags.push({ label: "Switch 2 Edition", cls: "tag-ns2" });
+      else if (DLC_QUESTS.has(name)) tags.push({ label: "DLC", cls: "tag-dlc" });
+
+      return tags;
+    }
+
+    function tagsHtml(name) {
+      const tags = tagsFor(name);
+      if (tags.length === 0) return "";
+      return `<span class="tag-row">${tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join("")}</span>`;
+    }
 
     const pages = [
       [["Cargo Escort", "Cargo_Escort"], ["Hide and Seek", "Hide_and_Seek_(quest)"], ["Knocked About Nopon", "Knocked_About_Nopon"], ["Buoy Can't Swim", "Buoy_Can%27t_Swim"], ["Star-Crossed Lovers", "Star-Crossed_Lovers"], ["A Young Man's Prize", "A_Young_Man%27s_Prize"]],
@@ -817,7 +950,10 @@
             <input type="checkbox" id="${id}" ${checked ? "checked" : ""}>
             <span class="diamond"></span>
           </span>
-          <label class="quest-name" for="${id}">${name}</label>
+          <span class="quest-text">
+            <label class="quest-name" for="${id}">${name}</label>
+            ${tagsHtml(name)}
+          </span>
           <a class="guide-btn" href="${WIKI_BASE}${slug}" target="_blank" rel="noopener noreferrer" title="Open wiki guide for ${name}" aria-label="Open wiki guide for ${name}">
             <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
             <span>Guide</span>
@@ -881,7 +1017,9 @@
           <a class="tile-guide-icon" href="${WIKI_BASE}${slug}" target="_blank" rel="noopener noreferrer" title="Open wiki guide for ${name}" aria-label="Open wiki guide for ${name}" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           </a>
-          <div class="tile-title-bar">${name}</div>
+          <div class="tile-title-bar">
+            <span>${name}${tagsHtml(name)}</span>
+          </div>
         `;
 
         const pageNum = pageIdx + 1;
@@ -1019,10 +1157,17 @@
       return out;
     }
 
-    function setThumbStatus(msg, isError) {
+    let thumbStatusTimer = null;
+    function setThumbStatus(msg, isError, persist) {
       const el = document.getElementById("thumbStatus");
       el.textContent = msg;
       el.style.color = isError ? "#e08b8b" : "";
+      if (thumbStatusTimer) clearTimeout(thumbStatusTimer);
+      if (msg && !persist) {
+        thumbStatusTimer = setTimeout(() => {
+          if (el.textContent === msg) el.textContent = "";
+        }, 3000);
+      }
     }
 
     async function fetchThumbnails(force) {
@@ -1033,13 +1178,11 @@
         return;
       }
 
-      const btn = document.getElementById("loadThumbsBtn");
-      btn.disabled = true;
       const batches = chunk(missing, 50);
       let done = 0, gotImage = 0, failed = 0;
 
       for (const batch of batches) {
-        setThumbStatus(`Fetching thumbnails... (${done}/${missing.length})`);
+        setThumbStatus(`Fetching thumbnails... (${done}/${missing.length})`, false, true);
         try {
           const params = new URLSearchParams({
             action: "query",
@@ -1086,7 +1229,6 @@
       }
 
       saveThumbCache(thumbCache);
-      btn.disabled = false;
 
       if (gotImage === 0 && failed > 0) {
         setThumbStatus("Couldn't reach the wiki's API from this browser (likely blocked cross-origin). Tiles will keep their placeholder icon.", true);
@@ -1097,7 +1239,19 @@
       render();
     }
 
-    document.getElementById("loadThumbsBtn").addEventListener("click", () => fetchThumbnails(false));
+    let autoThumbAttempted = false;
+
+    function maybeAutoFetchThumbs() {
+      if (autoThumbAttempted) return;
+      if (viewMode !== "tile") return;
+      autoThumbAttempted = true;
+
+      const allIds = Object.values(titleToId);
+      const anyCached = allIds.some(id => id in thumbCache);
+      if (anyCached) return; // already fetched before; don't re-hit the wiki
+
+      fetchThumbnails(false);
+    }
 
     document.getElementById("listViewBtn").addEventListener("click", () => {
       viewMode = "list";
@@ -1115,6 +1269,7 @@
       document.getElementById("listViewBtn").classList.remove("active");
       render();
       applySearchFilter();
+      maybeAutoFetchThumbs();
     });
 
     if (viewMode === "tile") {
@@ -1216,6 +1371,7 @@
     });
 
     render();
+    maybeAutoFetchThumbs();
   </script>
 
 </body>
