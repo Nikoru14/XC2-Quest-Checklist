@@ -434,7 +434,7 @@
       color: var(--gold);
     }
 
-    .tile-laurel {
+    .tile-gem {
       position: absolute;
       top: 6px;
       left: 6px;
@@ -442,27 +442,22 @@
       height: 22px;
       border-radius: 50%;
       background: rgba(0, 0, 0, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       border: 1px solid rgba(255, 255, 255, 0.12);
+      pointer-events: none;
     }
 
-    .tile-laurel svg {
-      width: 13px;
-      height: 13px;
-      opacity: 0.35;
-      color: var(--text-muted);
+    .tile-gem .diamond {
+      position: absolute;
+      inset: 5px;
+      border: 1.6px solid var(--text-muted);
+      transform: rotate(45deg);
+      transition: all 0.15s ease;
     }
 
-    .tile.done .tile-laurel {
-      background: rgba(227, 184, 79, 0.18);
-      border-color: var(--gold-dim);
-    }
-
-    .tile.done .tile-laurel svg {
-      opacity: 1;
-      color: var(--gold);
+    .tile.done .tile-gem .diamond {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(227, 184, 79, 0.55);
     }
 
     .tile-guide-icon {
@@ -1013,7 +1008,7 @@
 
         tile.innerHTML = `
           <div class="tile-thumb${thumbUrl ? " has-image" : ""}">${thumbHtml}</div>
-          <div class="tile-laurel">${LAUREL_ICON}</div>
+          <div class="tile-gem"><span class="diamond"></span></div>
           <a class="tile-guide-icon" href="${WIKI_BASE}${slug}" target="_blank" rel="noopener noreferrer" title="Open wiki guide for ${name}" aria-label="Open wiki guide for ${name}" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11V20H5.5C4.67 20 4 19.33 4 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 5.5C20 4.67 19.33 4 18.5 4H13V20H18.5C19.33 20 20 19.33 20 18.5V5.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           </a>
